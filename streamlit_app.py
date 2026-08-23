@@ -66,7 +66,7 @@ else:
     # Dissabte: Pics alts a migdia (compres de cap de setmana) i a la tarda
     escalivada      = [8, 12, 18, 25, 32, 0, 0, 12, 18, 28, 32, 18]
     carbasso        = [6, 10, 14, 20, 26, 0, 0, 10, 14, 22, 26, 12]
-    ceba            = [9, 15, 22, 30, 38, 0, 15, 22, 34, 38, 20]
+    ceba            = [9, 15, 22, 30, 38, 0, 0, 15, 22, 34, 38, 20]
     empanada        = [5,  8, 12, 16, 22, 0, 0, 8, 12, 18, 22, 10]
     alberginia_mel  = [6, 10, 15, 22, 28, 0, 0, 10, 15, 24, 28, 14]
     ceba_bolets     = [5,  9, 14, 20, 25, 0, 0, 9, 14, 22, 25, 12]
@@ -115,8 +115,8 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("### ⚡ 1. Enfornat Previ Optimitzat")
     st.write(
-        "Utilitzar les dades històriques de vendes per hora per programar la producció de massa i el forn **30 minuts abans del pic de demanda**. "
-        "Garaneix tenir el taulell carregat al 100% amb les varietats estrella just quan comença la cua a la caixa."
+        "Utilitzar les dades històriques de vendes per hores per programar la producció, anticipant agotament de certs gustos **30 minuts abans del pic de demanda**. "
+        "Garaneix tenir el taulell carregat al 100% amb les varietats estrella just al començament de les hores pic."
     )
     
     st.markdown("### 🌐 3. Nova Web i Comandes En Línia (Takeaway)")
@@ -130,7 +130,7 @@ with col2:
     st.markdown("### 💳 2. Programa de Fidelització de Clients")
     st.write(
         "**Objectiu:** Convertir el comprador ocasional en habitual mitjançant una targeta de fidelització (física o digital per mòbil).\n\n"
-        "**Mecanisme:** Premis per acumulació de compres (ex: la 10a porció o coca dolça de regal), augmentando la freqüència de visita setmanal."
+        "**Mecanisme:** Premis per acumulació de compres (ex: la 10a porció o coca dolça de regal), augmentant la freqüència de visita setmanal."
     )
 
     st.markdown("### 🏪 4. Distribució B2B (Locals de Menjar Preparat i Bars)")
