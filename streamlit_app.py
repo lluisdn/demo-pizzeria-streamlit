@@ -18,16 +18,16 @@ st.divider()
 st.subheader("📍 Selecció d'Establiment")
 local_seleccionat = st.radio(
     "Tria el local per actualitzar totes les dades del panell:",
-    ["Tots els locals (Consolidat)", "Local 1: Centre", "Local 2: Estació", "Local 3: Nord"],
+    ["Tots els locals (Consolidat)", "Bartomeu", "Progrès", "Plaça Nova"],
     horizontal=True
 )
 
 # Factores multiplicadores según selección para simular datos por local
 multiplicadors = {
     "Tots els locals (Consolidat)": 3.0,
-    "Local 1: Centre": 1.2,
-    "Local 2: Estació": 1.0,
-    "Local 3: Nord": 0.8
+    "Bartomeu": 1.2,
+    "Progrès": 1.0,
+    "Plaça Nova": 0.8
 }
 mult = multiplicadors[local_seleccionat]
 
@@ -39,7 +39,7 @@ st.subheader(f"📊 Mètriques Clau de Facturació i Vendes — {local_seleccion
 facturacio_base = 1845.50 * mult
 unitats_base = int(750 * mult)
 tiquet_mitja = 4.85 if "Consolidat" not in local_seleccionat else 4.85
-top_producte = "Escalivada" if local_seleccionat != "Local 3: Nord" else "Panadó / Empanada"
+top_producte = "Escalivada" if local_seleccionat != "Plaça Nova" else "Ceba"
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -130,7 +130,7 @@ fig.add_trace(go.Scatter(x=hores, y=empanada, name="Empanada / Panadó", mode='l
 
 fig.add_trace(go.Scatter(
     x=hores, y=capacitat_maxima, 
-    name="Capacitat Forn (90 porcions/h)", 
+    name="Capacitat Forn (100 porcions/h)", 
     mode='lines', 
     line=dict(color='red', width=3, dash='dash')
 ))
@@ -146,7 +146,7 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 
-st.error("⚠️ **Punt Crític Operatiu:** Les franges de 13:00 a 14:00 i de 19:00 a 20:30 la demanda frega o supera la capacitat de 90 porcions/hora del forn, generant cues al carrer i pèrdua de clients que no volen esperar.")
+st.error("⚠️ **Punt Crític Operatiu:** Les franges de 13:00 a 14:00 i de 19:00 a 20:30 la demanda supera la capacitat de 100 porcions/hora del forn, generant cues al carrer i pèrdua de clients que no volen esperar.")
 
 st.divider()
 
@@ -173,12 +173,11 @@ st.dataframe(df_inv, use_container_width=True, hide_index=True)
 col_alert1, col_alert2 = st.columns(2)
 
 with col_alert1:
-    st.warning("⚠️ **Alerta de Stock Crític per demà:**\n\n* **Ceba de Recollida:** Resta stock només per a 1.2 dies. Si no es fa comanda avui, demà a la tarda no es podran enfornar les varietats de Ceba ni Ceba i Bolets.\n* **Bolets Variats:** Queda stock per a 1.1 dies.")
+    st.warning("⚠️ **Alerta de Stock Crític per demà:**\n\n* **Ceba :** Nomès queda stock només per a 1.2 dies. Si no es fa comanda avui, demà a la tarda no es podran enfornar les varietats de Ceba ni Ceba i Bolets.\n* **Bolets Variats:** Queda stock per a 1.1 dies.")
 
 with col_alert2:
-    st.info("💡 **Ajust d'Stock Automatitzat:**\n\nGràcies al registre de vendes per porció en temps real, el sistema calcula el consum exacte de matèria prima i pot enviar la comanda automàtica al proveïdor quan l'autonomia sigui inferior a 2 dies.")
+    st.info("💡 **Ajust d'Stock Automatitzat:**\n\nGràcies al registre de vendes per porció, el sistema calcula el consum exacte de matèria prima i pot enviar la comanda al proveïdor quan l'autonomia sigui inferior a 2 dies.")
 
-st.divider()
 st.divider()
 
 # ==========================================
