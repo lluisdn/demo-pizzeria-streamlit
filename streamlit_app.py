@@ -8,7 +8,7 @@ st.set_page_config(page_title="Coques i Panadons Montse", layout="wide")
 
 # Capçalera amb el nom del local
 st.title("🥖 Coques i Panadons Montse")
-st.subtitle("Diagnòstic Operatiu, Escandallat i Pla de Creixement")
+# st.subtitle("Diagnòstic Operatiu, Escandallat i Pla de Creixement")
 
 st.divider()
 
