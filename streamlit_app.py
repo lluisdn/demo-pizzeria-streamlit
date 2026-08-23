@@ -8,7 +8,6 @@ st.set_page_config(page_title="Coques i Panadons Montse", layout="wide")
 
 # Capçalera amb el nom del local
 st.title("🍕 Coques i Panadons Montse")
-# st.subtitle("Diagnòstic Operatiu, Escandallat i Pla de Creixement")
 
 st.divider()
 
@@ -22,7 +21,7 @@ local_seleccionat = st.radio(
     horizontal=True
 )
 
-# Factores multiplicadores según selección para simular datos por local
+# Factors multiplicadors segons selecció per simular dades per local
 multiplicadors = {
     "Tots els locals (Consolidat)": 3.0,
     "Bartomeu": 1.2,
@@ -32,7 +31,7 @@ multiplicadors = {
 mult = multiplicadors[local_seleccionat]
 
 # ==========================================
-# 1. METRIQUES CLAU (KPIS A DALT DE TOT)
+# 1. MÈTRIQUES CLAU (KPIS A DALT DE TOT)
 # ==========================================
 st.subheader(f"📊 Mètriques Clau de Facturació i Vendes — {local_seleccionat}")
 
@@ -44,7 +43,7 @@ top_producte = "Escalivada" if local_seleccionat != "Plaça Nova" else "Ceba"
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric(label="Facturació Diària Estima", value=f"{facturacio_base:,.2f} €", delta="+12.4% vs setm. ant.")
+    st.metric(label="Facturació Diària Estimada", value=f"{facturacio_base:,.2f} €", delta="+12.4% vs setm. ant.")
 
 with col2:
     st.metric(label="Unitats Venudes / Dia", value=f"{unitats_base} porcions", delta="+8.1%")
@@ -58,7 +57,7 @@ with col4:
 st.divider()
 
 # ==========================================
-# 1. TAULA D'ESCANDALLAT I MARGES PER TROS
+# 2. TAULA D'ESCANDALLAT I MARGES PER TROS
 # ==========================================
 st.subheader("1. Anàlisi dels marges per porció")
 
@@ -90,7 +89,7 @@ st.dataframe(
 st.divider()
 
 # ==========================================
-# 2. CORBES DE DEMANDA VS. CAPACITAT (HORARI REAL)
+# 3. CORBES DE DEMANDA VS. CAPACITAT (HORARI REAL)
 # ==========================================
 st.subheader("2. Demanda vs. Capacitat (Horari: 9h-14h i 17h-21h)")
 
@@ -100,24 +99,22 @@ dia_seleccionat = st.radio("Selecciona el dia per avaluar la corba:", ["Divendre
 hores = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00 (Tancat)", "17:00 (Obert)", "18:00", "19:00", "20:00", "21:00"]
 
 if dia_seleccionat == "Divendres":
-    # Matí estable, pico a les 13h-14h. Tarda pico molt fort a les 19h-20:30h
-    escalivada      = [5,  8, 12, 18, 25, 0, 0, 15, 25, 30, 15]
-    carbasso        = [4,  6, 10, 14, 20, 0, 0, 12, 20, 24, 10]
-    ceba            = [6, 10, 15, 22, 30, 0, 0, 18, 30, 35, 18]
-    empanada        = [3,  5,  8, 12, 18, 0, 0, 10, 16, 20,  8]
-    alberginia_mel  = [4,  6, 10, 15, 22, 0, 0, 12, 22, 26, 12]
-    ceba_bolets     = [3,  5,  9, 14, 20, 0, 0, 11, 20, 25, 10]
+    escalivada      = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [5,  8, 12, 18, 25, 0, 0, 15, 25, 30, 15]]
+    carbasso        = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [4,  6, 10, 14, 20, 0, 0, 12, 20, 24, 10]]
+    ceba            = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [6, 10, 15, 22, 30, 0, 0, 18, 30, 35, 18]]
+    empanada        = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [3,  5,  8, 12, 18, 0, 0, 10, 16, 20,  8]]
+    alberginia_mel  = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [4,  6, 10, 15, 22, 0, 0, 12, 22, 26, 12]]
+    ceba_bolets     = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [3,  5,  9, 14, 20, 0, 0, 11, 20, 25, 10]]
 else:
-    # Dissabte: Pics alts a migdia (compres de cap de setmana) i a la tarda
-    escalivada      = [8, 12, 18, 25, 32, 0, 0, 18, 28, 32, 18]
-    carbasso        = [6, 10, 14, 20, 26, 0, 0, 14, 22, 26, 12]
-    ceba            = [9, 15, 22, 30, 38, 0, 0, 22, 34, 38, 20]
-    empanada        = [5,  8, 12, 16, 22, 0, 0, 12, 18, 22, 10]
-    alberginia_mel  = [6, 10, 15, 22, 28, 0, 0, 15, 24, 28, 14]
-    ceba_bolets     = [5,  9, 14, 20, 25, 0, 0, 14, 22, 25, 12]
+    escalivada      = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [8, 12, 18, 25, 32, 0, 0, 18, 28, 32, 18]]
+    carbasso        = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [6, 10, 14, 20, 26, 0, 0, 14, 22, 26, 12]]
+    ceba            = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [9, 15, 22, 30, 38, 0, 0, 22, 34, 38, 20]]
+    empanada        = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [5,  8, 12, 16, 22, 0, 0, 12, 18, 22, 10]]
+    alberginia_mel  = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [6, 10, 15, 22, 28, 0, 0, 15, 24, 28, 14]]
+    ceba_bolets     = [int(x * (mult/1.5 if "Consolidat" in local_seleccionat else mult)) for x in [5,  9, 14, 20, 25, 0, 0, 14, 22, 25, 12]]
 
-# Capacitat màxima ajustada a 90 porcions per hora (0 quan està tancat)
-capacitat_maxima = [100, 100, 100, 100, 100, 50, 50, 100, 100, 100, 100, 50]
+cap_val = 100 * (3 if "Consolidat" in local_seleccionat else 1)
+capacitat_maxima = [cap_val if "Tancat" not in h else 0 for h in hores]
 
 fig = go.Figure()
 
@@ -130,23 +127,34 @@ fig.add_trace(go.Scatter(x=hores, y=empanada, name="Empanada / Panadó", mode='l
 
 fig.add_trace(go.Scatter(
     x=hores, y=capacitat_maxima, 
-    name="Capacitat Forn (100 porcions/h)", 
+    name=f"Capacitat Forn ({cap_val} porcions/h)", 
     mode='lines', 
     line=dict(color='red', width=3, dash='dash')
 ))
 
 fig.update_layout(
-    title=f"Demanda Acumulada per Hores ({dia_seleccionat}) vs. Capacitat del Local",
+    title=f"Demanda Acumulada per Hores ({dia_seleccionat})",
     xaxis_title="Hora del Dia",
-    yaxis_title="Porcions Demandades / Hora",
+    yaxis_title="Porcions / Hora",
     hovermode="x unified",
-    height=450,
+    height=400,
+    margin=dict(l=10, r=10, t=40, b=10),  # Marges estrets per a pantalles de mòbil
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
 )
 
-st.plotly_chart(fig, use_container_width=True)
+# Desactivació del zoom i gestos al mòbil mitjançant el config de Plotly
+st.plotly_chart(
+    fig, 
+    use_container_width=True, 
+    config={
+        'scrollZoom': False,
+        'displayModeBar': False,
+        'doubleClick': False,
+        'showAxisDragHandles': False
+    }
+)
 
-st.error("⚠️ **Punt Crític Operatiu:** Les franges de 13:00 a 14:00 i de 19:00 a 20:30 la demanda supera la capacitat de 100 porcions/hora del forn, generant cues al carrer i pèrdua de clients que no volen esperar.")
+st.error("⚠️ **Punt Crític Operatiu:** Les franges de 13:00 a 14:00 i de 19:00 a 20:30 la demanda supera la capacitat del forn, generant cues al carrer i pèrdua de clients que no volen esperar.")
 
 st.divider()
 
@@ -173,7 +181,7 @@ st.dataframe(df_inv, use_container_width=True, hide_index=True)
 col_alert1, col_alert2 = st.columns(2)
 
 with col_alert1:
-    st.warning("⚠️ **Alerta de Stock Crític per demà:**\n\n* **Ceba :** Nomès queda stock només per a 1.2 dies. Si no es fa comanda avui, demà a la tarda no es podran enfornar les varietats de Ceba ni Ceba i Bolets.\n* **Bolets Variats:** Queda stock per a 1.1 dies.")
+    st.warning("⚠️ **Alerta de Stock Crític per demà:**\n\n* **Ceba:** Només queda stock per a 1.2 dies. Si no es fa comanda avui, demà a la tarda no es podran enfornar les varietats de Ceba ni Ceba i Bolets.\n* **Bolets Variats:** Queda stock per a 1.1 dies.")
 
 with col_alert2:
     st.info("💡 **Ajust d'Stock Automatitzat:**\n\nGràcies al registre de vendes per porció, el sistema calcula el consum exacte de matèria prima i pot enviar la comanda al proveïdor quan l'autonomia sigui inferior a 2 dies.")
@@ -181,17 +189,17 @@ with col_alert2:
 st.divider()
 
 # ==========================================
-# 3. PROPOSTES ESTRATÈGIQUES I NOU CANALS
+# 5. PROPOSTES ESTRATÈGIQUES I NOU CANALS
 # ==========================================
-st.subheader("3. Oportunitats Estratègiques de Creixement")
+st.subheader("4. Oportunitats Estratègiques de Creixement")
 
 col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("### ⚡ 1. Enfornat Previ Optimitzat")
     st.write(
-        "Utilitzar les dades històriques de vendes per hores per programar la producció, anticipant agotament de certs gustos **30 minuts abans del pic de demanda**. "
-        "Garaneix tenir el taulell carregat al 100% amb les varietats estrella just al començament de les hores pic."
+        "Utilitzar les dades històriques de vendes per hores per programar la producció, anticipant l'esgotament de certs gustos **30 minuts abans del pic de demanda**. "
+        "Garanteix tenir el taulell carregat al 100% amb les varietats estrella just al començament de les hores pic."
     )
     
     st.markdown("### 🌐 3. Nova Web i Comandes En Línia (Takeaway)")
