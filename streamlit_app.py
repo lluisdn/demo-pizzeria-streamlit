@@ -13,12 +13,13 @@ st.title("🍕 Coques i Panadons Montse")
 st.divider()
 
 # ==========================================
-# BARRA LATERAL: SELECTOR DE LOCAL
+# SELECTOR DE LOCAL (BOTONS HORITZONTALS)
 # ==========================================
-st.sidebar.header("⚙️ Configuració de la Demo")
-local_seleccionat = st.sidebar.selectbox(
-    "Selecciona el Local a analitzar:",
-    ["Tots els locals (Consolidat)", "Local 1: Centre", "Local 2: Estació", "Local 3: Nord"]
+st.subheader("📍 Selecció d'Establiment")
+local_seleccionat = st.radio(
+    "Tria el local per actualitzar totes les dades del panell:",
+    ["Tots els locals (Consolidat)", "Local 1: Centre", "Local 2: Estació", "Local 3: Nord"],
+    horizontal=True
 )
 
 # Factores multiplicadores según selección para simular datos por local
@@ -150,39 +151,34 @@ st.error("⚠️ **Punt Crític Operatiu:** Les franges de 13:00 a 14:00 i de 19
 st.divider()
 
 # ==========================================
-# 4. CONTROL DE VARIACIÓ D'INVENTARIS I MERMES
+# 4. VARIACIÓ D'INVENTARI I AUTONOMIA
 # ==========================================
-st.subheader("3. Control de Variació d'Inventaris i Mermes (Sobrants pel Tancament)")
+st.subheader("3. Variació d'Inventari de Matèria Prima i Previsió de Comprats")
 
-st.write("Avaluació del producte no venut al tancament dels torns (14:00h i 21:00h) per optimitzar l'última enfornada i reduir el devaluat d'inventari.")
+st.write("Relació entre les unitats venudes diàries, l'stock actual d'ingredients al magatzem i els dies d'autonomia restants.")
 
 data_inventari = {
-    "Producte": ["Escalivada", "Carbassó", "Ceba", "Empanada / Panadó", "Albergínia i Mel", "Ceba i Bolets"],
-    "Sobrant Torn 14:00h (Porcions)": [int(4 * mult), int(3 * mult), int(6 * mult), int(2 * mult), int(3 * mult), int(2 * mult)],
-    "Sobrant Torn 21:00h (Porcions)": [int(7 * mult), int(5 * mult), int(8 * mult), int(4 * mult), int(4 * mult), int(5 * mult)],
+    "Ingredient / Matèria Prima": ["Farina de Blat (kg)", "Ceba de Recollida (kg)", "Pebrot Escalivat (kg)", "Carbassó Fresc (kg)", "Albergínia (kg)", "Bolets Variats (kg)"],
+    "Varietat Associada": ["Totes les masses", "Ceba / Ceba i Bolets", "Escalivada", "Carbassó", "Albergínia i Mel", "Ceba i Bolets"],
+    "Consum Diari Estimat": [f"{round(45 * mult, 1)} kg", f"{round(18 * mult, 1)} kg", f"{round(14 * mult, 1)} kg", f"{round(10 * mult, 1)} kg", f"{round(9 * mult, 1)} kg", f"{round(8 * mult, 1)} kg"],
+    "Stock Actual al Magatzem": [f"{round(180 * mult, 1)} kg", f"{round(22 * mult, 1)} kg", f"{round(42 * mult, 1)} kg", f"{round(30 * mult, 1)} kg", f"{round(18 * mult, 1)} kg", f"{round(9 * mult, 1)} kg"],
+    "Autonomia Restant": ["4.0 dies", "1.2 dies ⚠️", "3.0 dies", "3.0 dies", "2.0 dies", "1.1 dies ⚠️"],
+    "Estat de Reaprovisionament": ["OK", "Cal demanar AVUI", "OK", "OK", "OK", "Cal demanar AVUI"]
 }
 
 df_inv = pd.DataFrame(data_inventari)
-df_inv["Total Sobrant (Porcions)"] = df_inv["Sobrant Torn 14:00h (Porcions)"] + df_inv["Sobrant Torn 21:00h (Porcions)"]
-# Cost mitjà de producció ~ 0.80€
-df_inv["Cost Econòmic Merma (€)"] = (df_inv["Total Sobrant (Porcions)"] * 0.80).round(2)
 
-col_inv1, col_inv2 = st.columns([2, 1])
+st.dataframe(df_inv, use_container_width=True, hide_index=True)
 
-with col_inv1:
-    st.dataframe(
-        df_inv.style.format({
-            "Cost Econòmic Merma (€)": "{:.2f} €"
-        }),
-        use_container_width=True,
-        hide_index=True
-    )
+col_alert1, col_alert2 = st.columns(2)
 
-with col_inv2:
-    total_mermes_cost = df_inv["Cost Econòmic Merma (€)"].sum()
-    total_porcions_sobrants = df_inv["Total Sobrant (Porcions)"].sum()
-    st.warning(f"📉 **Impacte de Mermes:**\n\n* **Porcions sobrants/dia:** {total_porcions_sobrants} unitats\n* **Cost directe en matèria prima:** {total_mermes_cost:.2f} € / dia\n\n*Ajustant l'últim batch d'enfornat 45 minuts abans del tancament es pot reduir aquesta tírria un 65%.*")
+with col_alert1:
+    st.warning("⚠️ **Alerta de Stock Crític per demà:**\n\n* **Ceba de Recollida:** Resta stock només per a 1.2 dies. Si no es fa comanda avui, demà a la tarda no es podran enfornar les varietats de Ceba ni Ceba i Bolets.\n* **Bolets Variats:** Queda stock per a 1.1 dies.")
 
+with col_alert2:
+    st.info("💡 **Ajust d'Stock Automatitzat:**\n\nGràcies al registre de vendes per porció en temps real, el sistema calcula el consum exacte de matèria prima i pot enviar la comanda automàtica al proveïdor quan l'autonomia sigui inferior a 2 dies.")
+
+st.divider()
 st.divider()
 
 # ==========================================
