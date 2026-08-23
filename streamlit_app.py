@@ -13,6 +13,50 @@ st.title("🍕 Coques i Panadons Montse")
 st.divider()
 
 # ==========================================
+# BARRA LATERAL: SELECTOR DE LOCAL
+# ==========================================
+st.sidebar.header("⚙️ Configuració de la Demo")
+local_seleccionat = st.sidebar.selectbox(
+    "Selecciona el Local a analitzar:",
+    ["Tots els locals (Consolidat)", "Local 1: Centre", "Local 2: Estació", "Local 3: Nord"]
+)
+
+# Factores multiplicadores según selección para simular datos por local
+multiplicadors = {
+    "Tots els locals (Consolidat)": 3.0,
+    "Local 1: Centre": 1.2,
+    "Local 2: Estació": 1.0,
+    "Local 3: Nord": 0.8
+}
+mult = multiplicadors[local_seleccionat]
+
+# ==========================================
+# 1. METRIQUES CLAU (KPIS A DALT DE TOT)
+# ==========================================
+st.subheader(f"📊 Mètriques Clau de Facturació i Vendes — {local_seleccionat}")
+
+facturacio_base = 1845.50 * mult
+unitats_base = int(750 * mult)
+tiquet_mitja = 4.85 if "Consolidat" not in local_seleccionat else 4.85
+top_producte = "Escalivada" if local_seleccionat != "Local 3: Nord" else "Panadó / Empanada"
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric(label="Facturació Diària Estima", value=f"{facturacio_base:,.2f} €", delta="+12.4% vs setm. ant.")
+
+with col2:
+    st.metric(label="Unitats Venudes / Dia", value=f"{unitats_base} porcions", delta="+8.1%")
+
+with col3:
+    st.metric(label="Tiquet Mitjà per Client", value=f"{tiquet_mitja:.2f} €", delta="+0.25 €")
+
+with col4:
+    st.metric(label="Producte Més Venut", value=top_producte)
+
+st.divider()
+
+# ==========================================
 # 1. TAULA D'ESCANDALLAT I MARGES PER TROS
 # ==========================================
 st.subheader("1. Anàlisi dels marges per porció")
@@ -102,6 +146,42 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 st.error("⚠️ **Punt Crític Operatiu:** Les franges de 13:00 a 14:00 i de 19:00 a 20:30 la demanda frega o supera la capacitat de 90 porcions/hora del forn, generant cues al carrer i pèrdua de clients que no volen esperar.")
+
+st.divider()
+
+# ==========================================
+# 4. CONTROL DE VARIACIÓ D'INVENTARIS I MERMES
+# ==========================================
+st.subheader("3. Control de Variació d'Inventaris i Mermes (Sobrants pel Tancament)")
+
+st.write("Avaluació del producte no venut al tancament dels torns (14:00h i 21:00h) per optimitzar l'última enfornada i reduir el devaluat d'inventari.")
+
+data_inventari = {
+    "Producte": ["Escalivada", "Carbassó", "Ceba", "Empanada / Panadó", "Albergínia i Mel", "Ceba i Bolets"],
+    "Sobrant Torn 14:00h (Porcions)": [int(4 * mult), int(3 * mult), int(6 * mult), int(2 * mult), int(3 * mult), int(2 * mult)],
+    "Sobrant Torn 21:00h (Porcions)": [int(7 * mult), int(5 * mult), int(8 * mult), int(4 * mult), int(4 * mult), int(5 * mult)],
+}
+
+df_inv = pd.DataFrame(data_inventari)
+df_inv["Total Sobrant (Porcions)"] = df_inv["Sobrant Torn 14:00h (Porcions)"] + df_inv["Sobrant Torn 21:00h (Porcions)"]
+# Cost mitjà de producció ~ 0.80€
+df_inv["Cost Econòmic Merma (€)"] = (df_inv["Total Sobrant (Porcions)"] * 0.80).round(2)
+
+col_inv1, col_inv2 = st.columns([2, 1])
+
+with col_inv1:
+    st.dataframe(
+        df_inv.style.format({
+            "Cost Econòmic Merma (€)": "{:.2f} €"
+        }),
+        use_container_width=True,
+        hide_index=True
+    )
+
+with col_inv2:
+    total_mermes_cost = df_inv["Cost Econòmic Merma (€)"].sum()
+    total_porcions_sobrants = df_inv["Total Sobrant (Porcions)"].sum()
+    st.warning(f"📉 **Impacte de Mermes:**\n\n* **Porcions sobrants/dia:** {total_porcions_sobrants} unitats\n* **Cost directe en matèria prima:** {total_mermes_cost:.2f} € / dia\n\n*Ajustant l'últim batch d'enfornat 45 minuts abans del tancament es pot reduir aquesta tírria un 65%.*")
 
 st.divider()
 
