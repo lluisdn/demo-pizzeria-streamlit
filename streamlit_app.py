@@ -189,7 +189,7 @@ with col_alert2:
 st.divider()
 
 # ==========================================
-# 3. PROPOSTES ESTRATÈGIQUES I NOU CANALS
+# 4. PROPOSTES ESTRATÈGIQUES I NOU CANALS
 # ==========================================
 st.subheader("3. Oportunitats Estratègiques de Creixement")
 
