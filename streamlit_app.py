@@ -72,7 +72,7 @@ else:
     ceba_bolets     = [5,  9, 14, 20, 25, 0, 0, 14, 22, 25, 12]
 
 # Capacitat màxima ajustada a 90 porcions per hora (0 quan està tancat)
-capacitat_maxima = [90, 90, 90, 90, 90, 45, 45, 90, 90, 90, 90, 90]
+capacitat_maxima = [100, 100, 100, 100, 100, 50, 50, 100, 100, 100, 100, 50]
 
 fig = go.Figure()
 
