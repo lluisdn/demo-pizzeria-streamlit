@@ -52,27 +52,27 @@ st.subheader("2. Demanda vs. Capacitat (Horari: 9h-14h i 17h-21h)")
 dia_seleccionat = st.radio("Selecciona el dia per avaluar la corba:", ["Divendres", "Dissabte"], horizontal=True)
 
 # Hores reals d'apertura (amb parada de 14h a 17h)
-hores = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00 (Tancat)", "16:45 (Tancat)", "17:00", "18:00", "19:00", "20:00", "21:00"]
+hores = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00 (Tancat)", "17:00 (Obert)", "18:00", "19:00", "20:00", "21:00"]
 
 if dia_seleccionat == "Divendres":
     # Matí estable, pico a les 13h-14h. Tarda pico molt fort a les 19h-20:30h
-    escalivada      = [5,  8, 12, 18, 25, 0, 0, 10, 15, 25, 30, 15]
-    carbasso        = [4,  6, 10, 14, 20, 0, 0, 8, 12, 20, 24, 10]
-    ceba            = [6, 10, 15, 22, 30, 0, 0, 12, 18, 30, 35, 18]
-    empanada        = [3,  5,  8, 12, 18, 0, 0, 6, 10, 16, 20,  8]
-    alberginia_mel  = [4,  6, 10, 15, 22, 0, 0, 8, 12, 22, 26, 12]
-    ceba_bolets     = [3,  5,  9, 14, 20, 0, 0, 7, 11, 20, 25, 10]
+    escalivada      = [5,  8, 12, 18, 25, 0, 0, 15, 25, 30, 15]
+    carbasso        = [4,  6, 10, 14, 20, 0, 0, 12, 20, 24, 10]
+    ceba            = [6, 10, 15, 22, 30, 0, 0, 18, 30, 35, 18]
+    empanada        = [3,  5,  8, 12, 18, 0, 0, 10, 16, 20,  8]
+    alberginia_mel  = [4,  6, 10, 15, 22, 0, 0, 12, 22, 26, 12]
+    ceba_bolets     = [3,  5,  9, 14, 20, 0, 0, 11, 20, 25, 10]
 else:
     # Dissabte: Pics alts a migdia (compres de cap de setmana) i a la tarda
-    escalivada      = [8, 12, 18, 25, 32, 0, 0, 12, 18, 28, 32, 18]
-    carbasso        = [6, 10, 14, 20, 26, 0, 0, 10, 14, 22, 26, 12]
-    ceba            = [9, 15, 22, 30, 38, 0, 0, 15, 22, 34, 38, 20]
-    empanada        = [5,  8, 12, 16, 22, 0, 0, 8, 12, 18, 22, 10]
-    alberginia_mel  = [6, 10, 15, 22, 28, 0, 0, 10, 15, 24, 28, 14]
-    ceba_bolets     = [5,  9, 14, 20, 25, 0, 0, 9, 14, 22, 25, 12]
+    escalivada      = [8, 12, 18, 25, 32, 0, 0, 18, 28, 32, 18]
+    carbasso        = [6, 10, 14, 20, 26, 0, 0, 14, 22, 26, 12]
+    ceba            = [9, 15, 22, 30, 38, 0, 0, 22, 34, 38, 20]
+    empanada        = [5,  8, 12, 16, 22, 0, 0, 12, 18, 22, 10]
+    alberginia_mel  = [6, 10, 15, 22, 28, 0, 0, 15, 24, 28, 14]
+    ceba_bolets     = [5,  9, 14, 20, 25, 0, 0, 14, 22, 25, 12]
 
 # Capacitat màxima ajustada a 90 porcions per hora (0 quan està tancat)
-capacitat_maxima = [90 if h != "14:00 (Tancat)" else 45 for h in hores]
+capacitat_maxima = [90, 90, 90, 90, 90, 45, 45, 90, 90, 90, 90, 90]
 
 fig = go.Figure()
 
