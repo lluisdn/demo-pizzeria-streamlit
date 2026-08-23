@@ -153,7 +153,7 @@ st.plotly_chart(
         'doubleClick': False,
         'showAxisDragHandles': False
     }
-
+)
 st.error("⚠️ **Punt Crític Operatiu:** Les franges de 13:00 a 14:00 i de 19:00 a 20:30 la demanda supera la capacitat de 100 porcions/hora del forn, generant cues al carrer i pèrdua de clients que no volen esperar.")
 
 st.divider()
