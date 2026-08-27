@@ -221,3 +221,35 @@ with col2:
         "**Escalabilitat externa:** Vendre coques i panadons en format d'engròs a bars de la zona, cafeteries o establiments de menjar preparat.\n\n"
         "**Impacte:** Garanteix un volum de producció constant a primera hora del matí (fora dels pics de venda directa del local)."
     )
+
+# ==========================================
+# PEU DE PÀGINA / BANDA HORITZONTAL DE CONTACTE
+# ==========================================
+st.markdown("<br><br>", unsafe_allow_html=True)
+
+footer_html = """
+<div style="
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #F1F5F9;
+    color: #334155;
+    border-top: 1px solid #E2E8F0;
+    padding: 4px 24px;
+    z-index: 99999;
+    font-size: 0.85rem;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.04);
+">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; font-size: 0.95rem;">
+            <div>👤 <strong>Desenvolupador:</strong> Lluís Deixt Nadal</div>
+            <div>🔗 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/lluisdeixt/" target="_blank" style="color: #38BDF8; text-decoration: none;">linkedin.com/in/lluisdeixt</a></div>
+            <div>✉️ <strong>Email:</strong> lluisdn2000@gmail.com</div>
+            <div>📞 <strong>Telèfon:</strong> 668 83 11 67</div>
+        </div>
+    </div>
+</div>
+"""
+
+st.markdown(footer_html, unsafe_allow_html=True)
